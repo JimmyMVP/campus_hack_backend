@@ -10,24 +10,7 @@ import requests
 import json
 
 
-API_KEY = "AIzaSyDrwomkGD3UmrS-M3nO4reGRAJiLEk78PY"
-
-
-params = {
-"size": "600x300",
-"location": "46.414382,10.013988",
-"heading": 151.78,
-"pitch": -0.76,
-"key": API_KEY,
-
-
-}
-
-street_view = "https://maps.googleapis.com/maps/api/streetview"
-
-
-
-
+#Function to get and  filter the immobilia
 @api_view(['GET'])
 def get_realestates(request, format=None):
 
@@ -39,53 +22,39 @@ def get_realestates(request, format=None):
     }
 
 
-    print(request.GET.values())
     for key, value in request.GET.items():
         params[key] = value
 
 
+    #Call to the astoria API
     response = requests.get("http://api.nestoria.de/api?", params = params)
 
+
+    #TODO filter the results based on how good they are
+
+
     d = json.loads(response.text)
-
-    lat, lon = d["response"]["listings"][0]["latitude"], d["response"]["listings"][0]["longitude"]
-    url = d["response"]["listings"][0]["lister_url"]
-
-    params_google = {
-
-        "size" : "600x300",
-        "location" : "%d,%d" %(lat, lon),
-        "heading" : 151.78,
-        "pitch" : -0.76,
-        "key" : API_KEY,
-
-    }
-
-    google_resp = requests.get(street_view, params_google)
-
-    cache.add(url, google_resp.content)
-   #print("Cached image: "  + google_resp.text)
-
-    d["response"]["streetview_image"] = url 
-
 
     return Response(d)
 
 
-
+#Testing function
 @api_view(['GET'])
 def test(request, format=None):
     return Response("Alles in Ordnung!")
 
 
 
-@api_view(['POST'])
+#Function fro getting street view from cache
+@api_view(['GET'])
 def get_streetview(request, format=None):
 
-    key = request.json["key"]
-    print(key)
+    key = request.GET["key"]
+    print("This is the key: " + key)
 
     img = cache.get(key)
+
+    print("And this is the image: " + str(img))
 
     return Response(img)
 
