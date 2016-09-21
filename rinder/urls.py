@@ -16,6 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from realestate_api import views as realestate
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^homes*', realestate.get_realestates)
+
 ]
