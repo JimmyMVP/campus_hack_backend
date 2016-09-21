@@ -20,6 +20,7 @@ from realestate_api import views as realestate
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^homes*', realestate.get_realestates)
-
+    url(r'^homes*', realestate.get_realestates),
+    url(r'^streetview*', realestate.get_streetview),
+    url(r'^test*', realestate.test)
 ]
