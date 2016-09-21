@@ -2,26 +2,23 @@ import requests
 import json
 
 
-params = {
-    
-    "action" : "echo",
-    "encoding" : "json",
-    "foo" : "bar",
+API_KEY = "AIzaSyDrwomkGD3UmrS-M3nO4reGRAJiLEk78PY"
+street_view = "https://maps.googleapis.com/maps/api/streetview"
 
-}
-#response = requests.get("http://api.nestoria.co.uk/api?", params = params)
 
 
 params = {
-    
-    "action" : "search_listings",
-    "encoding" : "json",
-    "foo" : "bar",
-    "place_name" : "karlsruhe"
+"size" : "600x300",
+"location" : "46.414382,10.013988",
+"heading" : 151.78,
+"pitch" : -0.76,
+"key" : API_KEY,
+
 
 }
 
-response = requests.get("http://api.nestoria.de/api?", params = params)
 
 
-print(response.text)
+resp = requests.get(street_view, params = params)
+
+print(resp.text)

@@ -64,7 +64,7 @@ def get_realestates(request, format=None):
     google_resp = requests.get(street_view, params_google)
 
     cache.add(url, google_resp.content)
-    print("Cached image: "  + google_resp.text)
+   #print("Cached image: "  + google_resp.text)
 
     d["response"]["streetview_image"] = url 
 
