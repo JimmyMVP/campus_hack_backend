@@ -51,6 +51,21 @@ def rate(houses):
     for house in houses:
         print((house["pot_rent_per_sm"], house["price"], house["construction_year"]))
 
+        ncr = house["net_cold_return"]*10
+        rating = 0
+        if(ncr < 0.2):
+            rating = 1
+        elif(ncr < 0.4):
+            rating = 2
+        elif(ncr < 0.6):
+            rating = 3
+        elif(ncr < 0.8):
+            rating = 4
+        else:
+            rating = 5
+
+        house["rating"] = rating
+
 
     return houses
 
@@ -85,7 +100,7 @@ def format_response(d):
 
             else:
                 fake["listing_type"] = "rent"
-                fake["rent"] = fake["price"] / 500.
+                fake["rent"] = fake["price"] / random.random()
                 fake["price_high"] = fake["price"]
         if fake["size"] == 0:
             if fake["property_type"] == "flat":
@@ -93,7 +108,7 @@ def format_response(d):
             else:
                 fake["size"] = random.randrange(90, 180)
         fake["ppsm"] = fake["price"] / fake["size"]
-        fake["rent"] = fake["price"] / 500.
+        fake["rent"] = fake["price"] / (5 + random.random()*13)
         fake["cold_rent"] = fake["rent"]
         fake["rent_per_sm"] = (fake["rent"] / fake["size"])
         fake["number_of_apartments"] = 1
