@@ -32,14 +32,14 @@ def rate(houses):
     avg = 0.
     count = 0
     for rent in houses:
-        if(rent["listing_type"] == "rent"):
-            count+=1
-            avg+=rent["rent"] 
+        count+=1
+        avg+=rent["rent"] 
     avg = avg / count
 
 
     for house in houses:
         house["average_rent"] = avg
+        house["pot_rent_per_sm"] = avg / house["rent"]
 
 
     #Return top 5
@@ -72,6 +72,7 @@ def format_response(d):
                     fake["rented_out"] = 1
                 else:
                     fake["rented_out"] = 0
+
             else:
                 fake["listing_type"] = "rent"
                 fake["rent"] = fake["price"] / 500.
@@ -82,7 +83,10 @@ def format_response(d):
             else:
                 fake["size"] = random.randrange(90, 180)
         fake["ppsm"] = fake["price"] / fake["size"]
-        fake["kaltmiete"] = fake["price_high"] - (random.randrange(0,5) * fake["price_high"] / 100)
+        fake["cold_rent"] = fake["price_high"] - (random.randrange(0,5) * fake["price_high"] / 100)
+        fake["rent"] = fake["price"] / 400.
+        fake["rent_per_sm"] = fake["rent"] / fake["size"]
+        fake["number_of_apartments"] = 1
         d["listings"][num] = fake
 
         cache.add(fake["lister_url"], fake)
