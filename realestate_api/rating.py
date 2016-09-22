@@ -22,7 +22,7 @@ rest_keys = [
 ]
 
 
-sorting_key = lambda x : (-float(x["pot_rent_per_sm"]),float(x["price"]), x["construction_year"])
+sorting_key = lambda x : (-x["rating"], -float(x["pot_rent_per_sm"]),float(x["price"]), x["construction_year"])
 
 
 
@@ -45,7 +45,6 @@ def rate(houses):
         house["pot_rent_per_sm"] = avg / house["rent"]
         house["net_cold_return"] = house["cold_rent"] / house["price"]
     
-    houses = sorted(houses, key = sorting_key)
    
     print(100*"-")
     for house in houses:
@@ -65,6 +64,8 @@ def rate(houses):
             rating = 5
 
         house["rating"] = rating
+    
+    houses = sorted(houses, key = sorting_key)
 
 
     return houses
