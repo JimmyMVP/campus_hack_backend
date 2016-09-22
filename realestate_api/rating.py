@@ -108,7 +108,7 @@ def format_response(d):
             else:
                 fake["size"] = random.randrange(90, 180)
         fake["ppsm"] = fake["price"] / fake["size"]
-        fake["rent"] = fake["price"] / (5 + random.random()*13)
+        fake["rent"] = fake["price"] / (6 + random.random()*20)
         fake["cold_rent"] = fake["rent"]
         fake["rent_per_sm"] = (fake["rent"] / fake["size"])
         fake["number_of_apartments"] = 1
@@ -123,7 +123,8 @@ def format_response(d):
             "price" : fake["price"],
             "rent" : fake["rent"],
             "construction_year" : fake["construction_year"],
-            "cold_rent" : fake["rent"]
+            "cold_rent" : fake["rent"],
+            "img_url" : fake["img_url"]
 
         }
         for key in rest_keys:
