@@ -2,12 +2,8 @@ import requests
 import json
 import random
 
-#from django.core.cache import cache
-import genetics as g
-
-data = open("./data", "r")
-
-data = data.read()
+from django.core.cache import cache
+from realestate_api import genetics as g
 
 #Genetics
 mutation_rate = 0.2
@@ -27,9 +23,9 @@ def rate(houses):
 
     #Calculate average rent
     avg = 0.
-    for rent in to_rent:
-        avg += rent["price_high"]
-    avg = avg / (len(to_rent)+1)
+    for rent in houses:
+        avg += rent["price"]
+    avg = avg / (len(houses)+1)
 
 
     for house in houses:
@@ -121,7 +117,7 @@ def other_options(params):
 
 def create_packages(houses, budget):
     solutions = []
-    g.find_packages([], houses, budget, solutions):
+    g.find_packages([], houses, budget, solutions)
     return solutions
 
 
