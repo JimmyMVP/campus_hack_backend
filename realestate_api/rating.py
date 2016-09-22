@@ -2,8 +2,7 @@ import requests
 import json
 import random
 
-import pdb
-
+from django.core.cache import cache
 
 #data = open("./data", "r")
 
@@ -51,6 +50,11 @@ def format_response(d):
 
     for num in range(0 ,len(d["listings"])):
         fake = d["listings"][num]
+
+        stored = cache.get(fake["img_url"])
+        if(stored != None):
+            d["listings"][num] = stored
+
         if fake["construction_year"] == 0:
             fake["construction_year"] = random.randrange(1990, 2016)
         if fake["img_url"] == "http://resources.nestimg.com/nestoria/img/cs4.2_v1.png":
@@ -72,6 +76,9 @@ def format_response(d):
                 fake["size"] = random.randrange(90, 180)
         fake["ppsm"] = fake["price"] / fake["size"]
         d["listings"][num] = fake
+
+        cache.add(fake["img_url"], fake)
+
     return d
 
 
