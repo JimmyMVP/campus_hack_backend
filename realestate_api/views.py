@@ -4,18 +4,21 @@ from rest_framework.decorators import api_view
 
 
 from django.core.cache import cache
+from django.shortcuts import render
 
 
 import requests
 import json
 
 
+MAPS_API_KEY = 'AIzaSyDBs7baI6Lq4B2A5sDtVVoFyhPOP6VBXLY'
+
 #Function to get and  filter the immobilia
 @api_view(['GET'])
 def get_realestates(request, format=None):
 
     params = {
-    
+
         "action" : "search_listings",
         "encoding" : "json",
 
@@ -58,7 +61,7 @@ def get_streetview(request, format=None):
 
     return Response(img)
 
+@api_view(['GET'])
+def get_map(request):
 
-
-
-
+    return render(request, "map.html", {})

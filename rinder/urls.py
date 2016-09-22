@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^homes*', realestate.get_realestates),
     url(r'^streetview*', realestate.get_streetview),
-    url(r'^test*', realestate.test)
+    url(r'^test*', realestate.test),
+    url(r'^map*', realestate.get_map)
 ]
