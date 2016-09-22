@@ -8,10 +8,17 @@ from django.core.cache import cache
 
 #data = data.read()
 
+#Genetics
+mutation_rate = 0.2
+crossover_rate = 0.2
+
+sorting_key = lambda x : (x["ppsm"],x["price"], x["construction_year"])
 
 
 #Returns the best options on the market, takes the list of the houses
 def rate(houses):
+
+
 
 #Property type, room_number,size_min,size_max, price_min, price_max 
     print(houses)
@@ -21,7 +28,7 @@ def rate(houses):
 
     print(len(houses))
 
-    houses = sorted(houses, key = lambda x: (x["ppsm"],x["price"], x["size"]))
+    houses = sorted(houses, key = sorting_key)
 
 
     #Calculate average rent
@@ -84,6 +91,9 @@ def format_response(d):
 
 
 
+
+
+
 def other_options(params):
 
     ne = (53.561577, 14.046648)
@@ -112,6 +122,11 @@ def other_options(params):
 
     print(other)  
     return other
+
+
+#houses = json.loads(data)["response"]["listings"]
+
+
 
 #d = format_response(json.loads(data))
 #print(rate(d["response"]["listings"]))
