@@ -1,8 +1,4 @@
-solutions = []
-
-
-def find_packages(chosen, houses, budget):
-    global solutions
+def find_packages(chosen, houses, budget, solutions):
 
     if(len(houses) <= 2):
         return
@@ -10,12 +6,14 @@ def find_packages(chosen, houses, budget):
     candidate = houses[0]
 
 
-    if(len(solutions > 10)):
+    if(len(solutions) > 10):
         return
     
-    cost =  sum([houses[x] for x in chosen])
+    cost =  sum([x["price"] for x in chosen])
 
-    find_packages(chosen, houses[1:], budget)
+    find_packages(chosen, houses[1:], budget, solutions)
+    chosen.append(houses[0])
+    find_packages(chosen[:], houses[1:], budget, solutions)
 
     if(cost < budget and len(chosen) > 1):
         solutions.append(chosen)
@@ -25,7 +23,4 @@ def find_packages(chosen, houses, budget):
 
 
 
-#Create investment packages that fit the budget
-def create_packages(houses, budget):
-    global solutions
-    solutions = []
+

@@ -2,11 +2,12 @@ import requests
 import json
 import random
 
-from django.core.cache import cache
+#from django.core.cache import cache
+import genetics as g
 
-#data = open("./data", "r")
+data = open("./data", "r")
 
-#data = data.read()
+data = data.read()
 
 #Genetics
 mutation_rate = 0.2
@@ -14,17 +15,6 @@ crossover_rate = 0.2
 
 sorting_key = lambda x : (x["ppsm"],x["price"], x["construction_year"])
 
-
-
-<<<<<<< HEAD
-=======
-
-
-#Property type, room_number,size_min,size_max, price_min, price_max 
-    print(houses)
-    to_rent = list(filter(lambda x: x["listing_type"] == "rent", houses))
-    houses = list(filter(lambda x: x["listing_type"] == "buy", houses))
->>>>>>> 654ca6707ff4b45ed5d787c9245a83aa69cd7782
 
 
 #Returns the best options on the market, takes the list of the houses
@@ -129,9 +119,11 @@ def other_options(params):
     return other
 
 
-#houses = json.loads(data)["response"]["listings"]
+def create_packages(houses, budget):
+    solutions = []
+    g.find_packages([], houses, budget, solutions):
+    return solutions
 
 
 
-#d = format_response(json.loads(data))
-#print(rate(d["response"]["listings"]))
+
