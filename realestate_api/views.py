@@ -27,11 +27,20 @@ def get_realestates(request, format=None):
 
         "action" : "search_listings",
         "encoding" : "json",
+        "place_name" : "germany",
+        "price_max" : int(request.GET["equity"])*10,
 
     }
 
-    for key, value in request.GET.items():
-        params[key] = value
+
+    if("number_of_results" in request.GET):
+        params["number_of_results"] = request.GET["number_of_results"]
+    else:
+        params["number_of_results"] = 50
+
+
+#    for key, value in request.GET.items():
+#        params[key] = value
 
 
     #Call to the astoria API
@@ -67,8 +76,10 @@ def get_streetview(request, format=None):
     img = cache.get(key)
 
     print("And this is the image: " + str(img))
-
+    
     return Response(img)
+
+
 
 @api_view(['GET'])
 def get_map(request):
