@@ -126,7 +126,9 @@ def format_response(d):
             "rent" : fake["rent"],
             "construction_year" : fake["construction_year"],
             "cold_rent" : fake["rent"],
-            "img_url" : fake["img_url"]
+            "img_url" : fake["img_url"],
+            "latitude" : fake["latitude"],
+            "longitude" : fake["longitude"]
 
         }
         for key in rest_keys:
