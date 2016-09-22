@@ -36,7 +36,7 @@ def get_realestates(request, format=None):
 
     #Call to the astoria API
     response = requests.get("http://api.nestoria.de/api?", params = params)
-    
+
     #Analyse the data
     d = json.loads(response.text)
     dd = r.format_response(d["response"])
@@ -46,6 +46,8 @@ def get_realestates(request, format=None):
 
     d["other_options"] = top_other
     return Response(d)
+
+
 
 
 #Testing function

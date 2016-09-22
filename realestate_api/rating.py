@@ -10,16 +10,13 @@ from django.core.cache import cache
 
 
 
+
+
+
 #Returns the best options on the market, takes the list of the houses
 def rate(houses):
 
-#Property type, room_number,size_min,size_max, price_min, price_max 
-    print(houses)
-    to_rent = list(filter(lambda x: x["listing_type"] == "rent", houses))
-    houses = list(filter(lambda x: x["listing_type"] == "buy", houses))
-
-
-    print(len(houses))
+#Property type, room_number,size_min,size_max, price_min, price_max
 
     houses = sorted(houses, key = lambda x: (x["ppsm"],x["price"], x["size"]))
 
@@ -35,8 +32,6 @@ def rate(houses):
         house["average_rent"] = avg
 
 
-    print("To rent: " + str(len(to_rent)))
-
     #Return top 5
     return houses[0:5]
 
@@ -51,7 +46,7 @@ def format_response(d):
     for num in range(0 ,len(d["listings"])):
         fake = d["listings"][num]
 
-        stored = cache.get(fake["img_url"])
+        stored = cache.get(fake["lister_url"])
         if(stored != None):
             d["listings"][num] = stored
 
@@ -63,11 +58,13 @@ def format_response(d):
             fake["thumb_url"] = "http://t2.gstatic.com/images?q=tbn:ANd9GcRliOf6pVeiyHjwS2_BN3sdKh_ak3VEQ4d_AfPdF6gFSYk9nKKu8qSO"
         if fake["listing_type"] == "buy":
             if random.randrange(0,2) > 0:
-                fake["listing_type"] = "buy"
+                if random.randrange(0,2) > 0:
+                    fake["rented_out"] = 1
+                else:
+                    fake["rented_out"] = 0
             else:
                 fake["listing_type"] = "rent"
-                fake["price"] = fake["price"] / 500
-                fake["price_low"] = fake["price"]
+                fake["price_low"] = fake["price"] / 500
                 fake["price_high"] = fake["price"]
         if fake["size"] == 0:
             if fake["property_type"] == "flat":
@@ -75,9 +72,10 @@ def format_response(d):
             else:
                 fake["size"] = random.randrange(90, 180)
         fake["ppsm"] = fake["price"] / fake["size"]
+        fake["kaltmiete"] = fake["price_high"] - (random.randrange(0,5) * fake["price_high"] / 100)
         d["listings"][num] = fake
 
-        cache.add(fake["img_url"], fake)
+        cache.add(fake["lister_url"], fake)
 
     return d
 
@@ -110,10 +108,8 @@ def other_options(params):
         #Extend with top 5 of this group
         other.extend(rate(d["listings"]))
 
-    print(other)  
+    print(other)
     return other
 
 #d = format_response(json.loads(data))
 #print(rate(d["response"]["listings"]))
-
-
