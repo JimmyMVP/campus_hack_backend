@@ -52,8 +52,12 @@ def get_realestates(request, format=None):
 
     top_5 = r.rate(dd["listings"])
     top_other = r.other_options(params)
+    #investment_packages = r.create_packages(top_5.extend(top_other), params["price_max"])
 
+    d = {}
+    d["best_picks"] = top_5
     d["other_options"] = top_other
+    #d["packages"] = investment_packages
     return Response(d)
 
 

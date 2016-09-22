@@ -5,6 +5,9 @@ import random
 from django.core.cache import cache
 from realestate_api import genetics as g
 
+import pdb
+
+
 #Genetics
 mutation_rate = 0.2
 crossover_rate = 0.2
