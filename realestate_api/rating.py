@@ -8,11 +8,20 @@ from realestate_api import genetics as g
 import pdb
 
 
-#Genetics
-mutation_rate = 0.2
-crossover_rate = 0.2
+#Out REST service keys
+rest_keys = [
+    "summary",
+    "net_cold_return",
+    "square_meters",
+    "rented",
+    "cold_rent",
+    "pot_rent_per_sm",
+    "number_of_apartments",
+    "number_of_rooms"
+]
 
-sorting_key = lambda x : (float(x["ppsm"]),float(x["price"]), x["construction_year"])
+
+sorting_key = lambda x : (-float(x["pot_rent_per_sm"]),float(x["price"]), x["construction_year"])
 
 
 
@@ -20,12 +29,6 @@ sorting_key = lambda x : (float(x["ppsm"]),float(x["price"]), x["construction_ye
 def rate(houses):
 
 #Property type, room_number,size_min,size_max, price_min, price_max
-
-    houses = sorted(houses, key = sorting_key)
-
-    print(100*"-")
-    for house in houses:
-        print((house["ppsm"], house["price"], house["construction_year"]))
 
 
     #Calculate average rent
@@ -38,14 +41,20 @@ def rate(houses):
 
 
     for house in houses:
-        house["average_rent"] = avg
         house["pot_rent_per_sm"] = avg / house["rent"]
+        house["net_cold_return"] = house["cold_rent"] / house["price"]
+    
+    houses = sorted(houses, key = sorting_key)
+   
+    print(100*"-")
+    for house in houses:
+        print((house["pot_rent_per_sm"], house["price"], house["construction_year"]))
 
 
-    #Return top 5
     return houses
 
 
+#Adding some value to the data
 def format_response(d):
 
     d["avg_user_queries"] = random.randrange(30, 400)
@@ -69,9 +78,9 @@ def format_response(d):
         if fake["listing_type"] == "buy":
             if random.randrange(0,2) > 0:
                 if random.randrange(0,2) > 0:
-                    fake["rented_out"] = 1
+                    fake["rented"] = 1
                 else:
-                    fake["rented_out"] = 0
+                    fake["rented"] = 0
 
             else:
                 fake["listing_type"] = "rent"
@@ -84,16 +93,32 @@ def format_response(d):
                 fake["size"] = random.randrange(90, 180)
         fake["ppsm"] = fake["price"] / fake["size"]
         fake["cold_rent"] = fake["price_high"] - (random.randrange(0,5) * fake["price_high"] / 100)
-        fake["rent"] = fake["price"] / 400.
-        fake["rent_per_sm"] = fake["rent"] / fake["size"]
+        fake["rent"] = fake["price"] / 500.
+        fake["rent_per_sm"] = (fake["rent"] / fake["size"])
         fake["number_of_apartments"] = 1
-        d["listings"][num] = fake
+
+
+
+        #Removing unnecessary things and renaming
+        fake["square_meters"] = fake["size"]
+        
+        filtered = {
+
+            "price" : fake["price"],
+            "rent" : fake["rent"],
+            "construction_year" : fake["construction_year"],
+            "cold_rent" : fake["cold_rent"]
+
+        }
+        for key in rest_keys:
+            if(key in filtered):
+                filtered[key] = fake[key]
+
+        d["listings"][num] = filtered
 
         cache.add(fake["lister_url"], fake)
 
     return d
-
-
 
 
 
