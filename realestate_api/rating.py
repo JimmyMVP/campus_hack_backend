@@ -12,7 +12,7 @@ import pdb
 mutation_rate = 0.2
 crossover_rate = 0.2
 
-sorting_key = lambda x : (x["ppsm"],x["price"], x["construction_year"])
+sorting_key = lambda x : (float(x["ppsm"]),float(x["price"]), x["construction_year"])
 
 
 
@@ -23,12 +23,19 @@ def rate(houses):
 
     houses = sorted(houses, key = sorting_key)
 
+    print(100*"-")
+    for house in houses:
+        print((house["ppsm"], house["price"], house["construction_year"]))
+
 
     #Calculate average rent
     avg = 0.
+    count = 0
     for rent in houses:
-        avg += rent["price"]
-    avg = avg / (len(houses)+1)
+        if(rent["listing_type"] == "rent"):
+            count+=1
+            avg+=rent["rent"] 
+    avg = avg / count
 
 
     for house in houses:
@@ -67,7 +74,7 @@ def format_response(d):
                     fake["rented_out"] = 0
             else:
                 fake["listing_type"] = "rent"
-                fake["price_low"] = fake["price"] / 500
+                fake["rent"] = fake["price"] / 500.
                 fake["price_high"] = fake["price"]
         if fake["size"] == 0:
             if fake["property_type"] == "flat":
@@ -114,7 +121,7 @@ def other_options(params):
         #Extend with top 5 of this group
         other.extend(rate(d["listings"]))
 
-    return other
+    return sorted(other, key=sorting_key)
 
 
 def create_packages(houses, budget):
