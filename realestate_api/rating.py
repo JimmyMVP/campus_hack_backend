@@ -17,7 +17,8 @@ rest_keys = [
     "cold_rent",
     "pot_rent_per_sm",
     "number_of_apartments",
-    "number_of_rooms"
+    "number_of_rooms",
+    "rent"
 ]
 
 
@@ -92,8 +93,8 @@ def format_response(d):
             else:
                 fake["size"] = random.randrange(90, 180)
         fake["ppsm"] = fake["price"] / fake["size"]
-        fake["cold_rent"] = fake["price_high"] - (random.randrange(0,5) * fake["price_high"] / 100)
         fake["rent"] = fake["price"] / 500.
+        fake["cold_rent"] = fake["rent"]
         fake["rent_per_sm"] = (fake["rent"] / fake["size"])
         fake["number_of_apartments"] = 1
 
@@ -107,11 +108,11 @@ def format_response(d):
             "price" : fake["price"],
             "rent" : fake["rent"],
             "construction_year" : fake["construction_year"],
-            "cold_rent" : fake["cold_rent"]
+            "cold_rent" : fake["rent"]
 
         }
         for key in rest_keys:
-            if(key in filtered):
+            if(key in fake):
                 filtered[key] = fake[key]
 
         d["listings"][num] = filtered
