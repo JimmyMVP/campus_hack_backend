@@ -51,14 +51,15 @@ def get_realestates(request, format=None):
     d = json.loads(response.text)
     dd = r.format_response(d["response"])
 
-    top  = r.rate(dd["listings"])[0:number_of_results]
+    res  = r.rate(dd["listings"])
     top_other = r.other_options(params)
-    #investment_packages = r.create_packages(top_5.extend(top_other), params["price_max"])
+    investment_packages = r.create_packages(res, int(params["price_max"]))
 
+    top = res[0:number_of_results]
     d = {}
     d["best_picks"] = top
     d["other_options"] = top_other[0:5]
-    #d["packages"] = investment_packages
+    d["investment_packages"] = investment_packages
     return Response(d)
 
 
