@@ -36,7 +36,7 @@ def rate(houses):
 
 
     #Return top 5
-    return houses[0:5]
+    return houses
 
 
 def format_response(d):

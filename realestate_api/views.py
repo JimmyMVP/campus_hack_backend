@@ -32,11 +32,12 @@ def get_realestates(request, format=None):
 
     }
 
+    params["number_of_results"] = 50
 
-    if("number_of_results" in request.GET):
-        params["number_of_results"] = request.GET["number_of_results"]
+    if "number_of_results" in request.GET:
+        number_of_results = int(request.GET["number_of_results"])
     else:
-        params["number_of_results"] = 50
+        number_of_results = 5
 
 
 #    for key, value in request.GET.items():
@@ -50,13 +51,13 @@ def get_realestates(request, format=None):
     d = json.loads(response.text)
     dd = r.format_response(d["response"])
 
-    top_5 = r.rate(dd["listings"])
+    top  = r.rate(dd["listings"])[0:number_of_results]
     top_other = r.other_options(params)
     #investment_packages = r.create_packages(top_5.extend(top_other), params["price_max"])
 
     d = {}
-    d["best_picks"] = top_5
-    d["other_options"] = top_other
+    d["best_picks"] = top
+    d["other_options"] = top_other[0:5]
     #d["packages"] = investment_packages
     return Response(d)
 
