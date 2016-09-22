@@ -114,7 +114,6 @@ def other_options(params):
         #Extend with top 5 of this group
         other.extend(rate(d["listings"]))
 
-    print(other)
     return other
 
 
